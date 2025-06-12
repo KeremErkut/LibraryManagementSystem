@@ -22,9 +22,9 @@ public class Main {
 
     // Database connection details
     // IMPORTANT: Replace these with your actual MySQL database credentials
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/library_db?useSSL=false&serverTimezone=UTC";
-    private static final String DB_USERNAME = "root"; // Your MySQL username
-    private static final String DB_PASSWORD = "123458"; // Your MySQL password
+    private static final String DB_URL = "";
+    private static final String DB_USERNAME = "library_user"; // Your MySQL username
+    private static final String DB_PASSWORD = ""; // Your MySQL password
 
     public static void main(String[] args) {
         // Step 1: Initialize ConnectionManager
