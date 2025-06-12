@@ -2,7 +2,7 @@ package com.librarymanagementsystem.model;
 
 /**
  * The class which represents the book category object class.
- * This class inculudes category ID, Category name for each category.
+ * This class includes category ID, Category name for each category.
  */
 public class Category {
     private int id;       // Category ID

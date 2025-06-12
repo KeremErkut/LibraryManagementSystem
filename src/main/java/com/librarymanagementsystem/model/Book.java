@@ -2,13 +2,13 @@ package com.librarymanagementsystem.model;
 
 /**
  * The class which represents the book object class
- * This class inculudes an ID, a Title, Category and Published Year for each book.
+ * This class includes an ID, a Title, Category and Published Year for each book.
  */
 public class Book {
     private String id;        // Book ID
     private String title;     // Book Title
     private String author;    // Book Author
-    private int category;     // Book Category ID (Kategori ID'si)
+    private int category;     // Book Category ID
     private int year;         // Book Year
 
     /**
