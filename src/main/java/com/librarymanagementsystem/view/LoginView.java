@@ -1,6 +1,9 @@
 package com.librarymanagementsystem.view;
 
 import com.librarymanagementsystem.auth.UserAuthenticator;
+import com.librarymanagementsystem.dao.BookDAO;
+import com.librarymanagementsystem.dao.CategoryDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +16,9 @@ import java.awt.event.ActionListener;
 public class LoginView extends JFrame {
 
     private final UserAuthenticator authenticator;
+    private final BookDAO bookDAO;
+    private final CategoryDAO categoryDAO;
+
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -22,9 +28,14 @@ public class LoginView extends JFrame {
      * Constructs a new LoginView.
      *
      * @param authenticator The UserAuthenticator instance to handle user authentication.
+     * @param bookDAO The BookDAO instance to pass to BookManagementView upon successful login.
+     * @param categoryDAO The CategoryDAO instance to pass to BookManagementView upon successful login.
+     *
      */
-    public LoginView(UserAuthenticator authenticator) {
+    public LoginView(UserAuthenticator authenticator, BookDAO bookDAO, CategoryDAO categoryDAO) {
         this.authenticator = authenticator;
+        this.bookDAO = bookDAO;
+        this.categoryDAO = categoryDAO;
         initializeUI();
     }
 
@@ -101,22 +112,20 @@ public class LoginView extends JFrame {
      */
     private void attemptLogin() {
         String username = usernameField.getText();
-        String password = new String(passwordField.getPassword()); // Get password as char array and convert to String
+        String password = new String(passwordField.getPassword());
 
         if (authenticator.authenticate(username, password)) {
-            messageLabel.setForeground(new Color(0, 128, 0)); // Green for success
+            messageLabel.setForeground(new Color(0, 128, 0));
             messageLabel.setText("Login successful!");
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            // Close login window and open main application window
             this.dispose(); // Close the current login frame
 
-            // Open BookManagementView
+            // Open BookManagementView upon successful login
             SwingUtilities.invokeLater(() -> {
-                // BookManagementView needs ConnectionManager, BookDAO, CategoryDAO, UserAuthenticator
-                // These will be passed from Main class or constructed here
-                // For simplicity, let's assume they are available or passed from Main.
-                // We will refine this in the Main class.
+                // Pass all necessary DAOs and authenticator to BookManagementView
+                BookManagementView bookManagementView = new BookManagementView(bookDAO, categoryDAO, authenticator);
+                bookManagementView.setVisible(true);
             });
 
         } else {
