@@ -22,9 +22,9 @@ public class Main {
 
     // Database connection details
     // IMPORTANT: Replace these with your actual MySQL database credentials
-    private static final String DB_URL = "";
-    private static final String DB_USERNAME = "library_user"; // Your MySQL username
-    private static final String DB_PASSWORD = ""; // Your MySQL password
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/library_db?useSSL=false&serverTimezone=UTC";
+    private static final String DB_USERNAME = "root"; // Your MySQL username
+    private static final String DB_PASSWORD = "Kerem123+"; // Your MySQL password
 
     public static void main(String[] args) {
         // Step 1: Initialize ConnectionManager
@@ -62,6 +62,7 @@ public class Main {
         // Step 4: Check for an initial admin user and create if not exists
         // This is a common practice for initial setup or first run
         initializeAdminUser(authenticator, connectionManager);
+        initializeUserUser(authenticator, connectionManager);
 
         // Step 5: Start the Login View on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
@@ -144,6 +145,54 @@ public class Main {
             }
         } else {
             System.out.println("Admin user already exists. Skipping initial admin creation.");
+        }
+    }
+
+    /**
+     * Initializes a standard user if one does not exist in the database.
+     *
+     * @param authenticator The UserAuthenticator instance.
+     * @param connectionManager The ConnectionManager instance.
+     */
+    private static void initializeUserUser(UserAuthenticator authenticator, ConnectionManager connectionManager) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        boolean userExists = false;
+
+        try {
+            conn = connectionManager.getConnection();
+            if (conn != null) {
+                // Check any USER named 'user'
+                pstmt = conn.prepareStatement("SELECT COUNT(*) FROM users WHERE username = 'user' AND role = 'USER'");
+                rs = pstmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    userExists = true;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking for user existence: " + e.getMessage());
+        } finally {
+            connectionManager.closeResultSet(rs);
+            connectionManager.closeStatement(pstmt);
+            connectionManager.closeConnection(conn);
+        }
+
+        if (!userExists) {
+            // Create USER
+            String defaultUserUsername = "user";
+            String defaultUserPassword = "userpassword"; //Chose a strong password.
+            if (authenticator.createUser(defaultUserUsername, defaultUserPassword, "USER")) {
+                System.out.println("Default USER user '" + defaultUserUsername + "' created successfully.");
+                JOptionPane.showMessageDialog(null,
+                        "Initial USER user created:\nUsername: " + defaultUserUsername + "\nPassword: " + defaultUserPassword,
+                        "Initial Setup", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                System.err.println("Failed to create default USER user.");
+                JOptionPane.showMessageDialog(null, "Failed to create default USER user.", "Initial Setup Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            System.out.println("User user already exists. Skipping initial user creation.");
         }
     }
 }

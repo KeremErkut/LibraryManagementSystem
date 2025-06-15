@@ -25,9 +25,9 @@ public class ConnectionManager {
      * @param pass The database password.
      */
     public ConnectionManager(String url, String user, String pass) {
-        this.DB_URL = "jdbc:mysql://localhost:3306/library_db";
+        this.DB_URL = "jdbc:mysql://localhost:3306/library_db?useSSL=false&serverTimezone=UTC";
         this.DB_USERNAME = "root";
-        this.DB_PASSWORD = "123458";
+        this.DB_PASSWORD = "Kerem123+";
 
         // Optional: Load the JDBC driver once when the manager is initialized
         try {

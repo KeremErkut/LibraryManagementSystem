@@ -64,7 +64,7 @@ public class BookManagementView extends JFrame {
      */
     private void initializeUI() {
         setTitle("Library Management System - " + (authenticator.getCurrentUserRole() != null ? authenticator.getCurrentUserRole() : "Guest"));
-        setSize(1200, 700); // Adjust size as needed
+        setSize(1530, 900); // Adjust size as needed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 
